@@ -1,0 +1,524 @@
+/user/local/hadoop$ bin/hdfs namenode -format
+
+/user/local/hadoop$  sbin/start-all.sh
+
+/user/local/hadoop$ jps
+
+/usr/local/hadoop$ cd Dados
+
+/usr/local/hadoop/Dados$ ls
+
+/usr/local/hadoop/Dados$ cd ..
+
+/usr/local/hadoop/Dados$ 
+
+/usr/local/hadoop$ bin/hdfs dfs -mkdir /igti
+
+/usr/local/hadoop$ bin/hdfs dfs -mkdir /igti/Desafio
+
+/usr/local/hadoop$ bin/hdfs dfs -ls /igti
+
+/usr/local/hadoop$ bin/hdfs dfs -put /usr/local/hadoop/Dados/covidData.txt /igti/Desafio    (copiar o arquivo)
+
+/usr/local/hadoop$ bin/hdfs dfs -ls /igti/Desafio
+
+/usr/local/hadoop$ bin/hdfs dfs -cat /igti/Desafio/covidData.txt    (mostra o conteúdo)
+
+
+INICIAR O HIVE
+###############
+
+/usr/local/hadoop$ bin/hdfs dfs -ls /igti/Desafio
+
+/usr/local/hadoop$ bin/hdfs dfs -cat /igti/Desafio/covidData.txt    (mostra o conteúdo)
+
+/usr/local/hadoop$ cd ..
+
+/usr/local$ cd hive
+
+/usr/local/hive$ ls
+
+/usr/local/hive$ /usr/local/hadoop/bin/hdfs dfs -mkdir /hive
+
+/usr/local/hive$ /usr/local/hadoop/bin/hdfs dfs -ls /
+
+/usr/local/hive$ ls
+
+/usr/local/hive$ rm -rf metastore_db  (remover pasta que contém arquivos Schema antigos)
+
+/usr/local/hive$ bin/schematool -initSchema -dbType derby    (reconstruir os Schemas)
+schemaTool completo
+
+/usr/local/hive$ bin/hive    (inicia o shell do hive para exercutar comandos)
+
+hive> show databases;
+
+hive> create database dbDesafio;
+
+hive> show tables;
+
+hive> CREATE TABLE DADOSCOVID (dataOcorrencia STRING, siglaPais STRING, descPais STRING, regiao STRING, novosCasos INT, casosAcumulados INT, novosObitos INT, obitosAcumulados INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STOREGE AS TEXTFILE LOCATION '/igti/Desafio/coviddados';
+
+hive> show tables;
+
+hive> LOAD DATA INPATH 'hdfs://localhost:54310/igti/Desafio/covidData.txt' INTO TABLE DADOSCOVID;
+
+hive> select * from DADOSCOVID;
+
+hive> select count(*) from dadoscovid;
+
+hive> 
+
+
+
+################################################################
+
+igti@igti-VirtualBox:/usr/local/hadoop$ cd ..
+igti@igti-VirtualBox:/usr/local$ cd hive
+igti@igti-VirtualBox:/usr/local/hive$ ls
+bin  binary-package-licenses  conf  derby.log  examples  hcatalog  jdbc  lib  LICENSE  metastore_db  NOTICE  one.java  RELEASE_NOTES.txt  scripts  two.java
+igti@igti-VirtualBox:/usr/local/hive$ /usr/local/hadoop/bin/hdfs dfs -mkdir /hive
+igti@igti-VirtualBox:/usr/local/hive$ /usr/local/hadoop/bin/hdfs dfs -ls /hive
+igti@igti-VirtualBox:/usr/local/hive$ /usr/local/hadoop/bin/hdfs dfs -ls /
+Found 2 items
+drwxr-xr-x   - igti supergroup          0 2020-06-10 13:52 /hive
+drwxr-xr-x   - igti supergroup          0 2020-06-10 12:15 /igti
+igti@igti-VirtualBox:/usr/local/hive$ ls
+bin  binary-package-licenses  conf  derby.log  examples  hcatalog  jdbc  lib  LICENSE  metastore_db  NOTICE  one.java  RELEASE_NOTES.txt  scripts  two.java
+igti@igti-VirtualBox:/usr/local/hive$ rm -rf metastore_db/
+igti@igti-VirtualBox:/usr/local/hive$ ls
+bin  binary-package-licenses  conf  derby.log  examples  hcatalog  jdbc  lib  LICENSE  NOTICE  one.java  RELEASE_NOTES.txt  scripts  two.java
+igti@igti-VirtualBox:/usr/local/hive$ bin/Schematool -initSchema -dbType derby
+bash: bin/Schematool: Arquivo ou diretório não encontrado
+igti@igti-VirtualBox:/usr/local/hive$ bin/schematool -initSchema -dbType derby
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/local/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/local/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Metastore connection URL: jdbc:derby:;databaseName=metastore_db;create=true
+Metastore Connection Driver : org.apache.derby.jdbc.EmbeddedDriver
+Metastore connection User: APP
+Starting metastore schema initialization to 3.1.0
+Initialization script hive-schema-3.1.0.derby.sql
+
+
+
+Initialization script completed
+schemaTool completed
+igti@igti-VirtualBox:/usr/local/hive$ ls
+bin  binary-package-licenses  conf  derby.log  examples  hcatalog  jdbc  lib  LICENSE  metastore_db  NOTICE  one.java  RELEASE_NOTES.txt  scripts  two.java
+igti@igti-VirtualBox:/usr/local/hive$ cd bin/hive
+bash: cd: bin/hive: Não é um diretório
+igti@igti-VirtualBox:/usr/local/hive$ ls
+bin  binary-package-licenses  conf  derby.log  examples  hcatalog  jdbc  lib  LICENSE  metastore_db  NOTICE  one.java  RELEASE_NOTES.txt  scripts  two.java
+igti@igti-VirtualBox:/usr/local/hive$ cd bin
+igti@igti-VirtualBox:/usr/local/hive/bin$ ls
+beeline  dados_alunos.txt  ext  hive  hive-config.sh  hiveserver2  hplsql  init-hive-dfs.sh  metatool  schematool
+igti@igti-VirtualBox:/usr/local/hive/bin$ cd hive
+bash: cd: hive: Não é um diretório
+igti@igti-VirtualBox:/usr/local/hive/bin$ cd ..
+igti@igti-VirtualBox:/usr/local/hive$ bin/hive
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/local/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/local/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Hive Session ID = fc44fe4b-fac2-4a3e-b571-fbdf46d8f224
+
+Logging initialized using configuration in jar:file:/usr/local/hive/lib/hive-common-3.1.2.jar!/hive-log4j2.properties Async: true
+Hive Session ID = 5091f3ba-d895-4d01-9bee-94d629718f37
+Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+hive> show databases;
+OK
+default
+Time taken: 1.028 seconds, Fetched: 1 row(s)
+hive> create database dbDesafio;
+OK
+Time taken: 0.194 seconds
+hive> show tables
+    > ;
+OK
+Time taken: 0.149 seconds
+hive> CREATE TABLE DadosCovid (dataOcorrencia STRING, siglaPais STRING, descPais STRING, regiao STRING, novosCasos INT,casosAcumulados INT, novosObitos INT, obitosAcumulados INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED AS TEXTFILE LOCATION '/igti/Desafio/CovidDados';
+OK
+Time taken: 0.783 seconds
+hive> select * from CovidDados
+    > ;
+FAILED: SemanticException [Error 10001]: Line 1:14 Table not found 'CovidDados'
+hive> select * from COVIDDADOS;
+FAILED: SemanticException [Error 10001]: Line 1:14 Table not found 'COVIDDADOS'
+hive> select * from CovidDados;
+FAILED: SemanticException [Error 10001]: Line 1:14 Table not found 'CovidDados'
+hive> CREATE TABLE DadosCovid (dataOcorrencia STRING, siglaPais STRING, descPais STRING, regiao STRING, novosCasos INT,casosAcumulados INT, novosObitos INT, obitosAcumulados INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED AS TEXTFILE LOCATION '/hive/dbDesafio/COVID_DATA;
+MismatchedTokenException(14!=379)
+at org.antlr.runtime.BaseRecognizer.recoverFromMismatchedToken(BaseRecognizer.java:617)
+at org.antlr.runtime.BaseRecognizer.match(BaseRecognizer.java:115)
+at org.apache.hadoop.hive.ql.parse.HiveParser.tableLocation(HiveParser.java:29609)
+at org.apache.hadoop.hive.ql.parse.HiveParser.createTableStatement(HiveParser.java:6805)
+at org.apache.hadoop.hive.ql.parse.HiveParser.ddlStatement(HiveParser.java:4295)
+at org.apache.hadoop.hive.ql.parse.HiveParser.execStatement(HiveParser.java:2494)
+at org.apache.hadoop.hive.ql.parse.HiveParser.statement(HiveParser.java:1420)
+at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:220)
+at org.apache.hadoop.hive.ql.parse.ParseUtils.parse(ParseUtils.java:74)
+at org.apache.hadoop.hive.ql.parse.ParseUtils.parse(ParseUtils.java:67)
+at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:616)
+at org.apache.hadoop.hive.ql.Driver.compileInternal(Driver.java:1826)
+at org.apache.hadoop.hive.ql.Driver.compileAndRespond(Driver.java:1773)
+at org.apache.hadoop.hive.ql.Driver.compileAndRespond(Driver.java:1768)
+at org.apache.hadoop.hive.ql.reexec.ReExecDriver.compileAndRespond(ReExecDriver.java:126)
+at org.apache.hadoop.hive.ql.reexec.ReExecDriver.run(ReExecDriver.java:214)
+at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:239)
+at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:188)
+at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:402)
+at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:821)
+at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:759)
+at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:683)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.lang.reflect.Method.invoke(Method.java:498)
+at org.apache.hadoop.util.RunJar.run(RunJar.java:244)
+at org.apache.hadoop.util.RunJar.main(RunJar.java:158)
+FAILED: ParseException line 1:273 mismatched input '/' expecting StringLiteral near 'LOCATION' in table location specification
+hive> CREATE TABLE DadosCovid (dataOcorrencia STRING, siglaPais STRING, descPais STRING, regiao STRING, novosCasos INT,casosAcumulados INT, novosObitos INT, obitosAcumulados INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED AS TEXTFILE LOCATION '/hive/dbDesafio/COVID_DADOS';
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. AlreadyExistsException(message:Table hive.default.DadosCovid already exists)
+hive> SHOW TABLES;
+OK
+dadoscovid
+Time taken: 0.044 seconds, Fetched: 1 row(s)
+hive> CREATE TABLE DadosCovid (dataOcorrencia STRING, siglaPais STRING, descPais STRING, regiao STRING, novosCasos INT,casosAcumulados INT, novosObitos INT, obitosAcumulados INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED AS TEXTFILE LOCATION '/hive/dbDesafio/dadoscovid';
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. AlreadyExistsException(message:Table hive.default.DadosCovid already exists)
+hive> CREATE TABLE DadosCovid (dataOcorrencia STRING, siglaPais STRING, descPais STRING, regiao STRING, novosCasos INT,casosAcumulados INT, novosObitos INT, obitosAcumulados INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' STORED AS TEXTFILE LOCATION 'HDFS:/Desafio';
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. org.apache.hadoop.fs.UnsupportedFileSystemException: No FileSystem for scheme "HDFS"
+hive> SHOW TABLES;
+OK
+dadoscovid
+Time taken: 0.036 seconds, Fetched: 1 row(s)
+hive> LOAD DATA INPATH 'hdfs://localhost:54310/igti/Desafio/covidData.txt' INTO TABLE DADOSCOVID;
+Loading data to table default.dadoscovid
+OK
+Time taken: 0.931 seconds
+hive>
+
+
+
+hive> select count(*) from dadoscovid
+    > ;
+Query ID = igti_20200610150629_e2fe3d52-1b69-4dce-b02b-9f8497d6b353
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1591801982106_0001, Tracking URL = http://igti-VirtualBox:8088/proxy/application_1591801982106_0001/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1591801982106_0001
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2020-06-10 15:06:49,961 Stage-1 map = 0%,  reduce = 0%
+2020-06-10 15:07:03,626 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.42 sec
+2020-06-10 15:07:21,726 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 7.5 sec
+MapReduce Total cumulative CPU time: 7 seconds 500 msec
+Ended Job = job_1591801982106_0001
+MapReduce Jobs Launched:
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 7.5 sec   HDFS Read: 942919 HDFS Write: 105 SUCCESS
+Total MapReduce CPU Time Spent: 7 seconds 500 msec
+OK
+17705
+Time taken: 55.581 seconds, Fetched: 1 row(s)
+hive>
+
+
+
+
+
+
+hive> select casosAcumulados from dadoscovid where descPais = 'Brazil';
+OK
+1
+1
+1
+1
+2
+2
+2
+3
+7
+8
+19
+19
+25
+25
+34
+52
+98
+121
+121
+200
+234
+291
+428
+621
+904
+904
+904
+2201
+2201
+2433
+2433
+2915
+3417
+3904
+4256
+4579
+5717
+6836
+7910
+9056
+10278
+11130
+12056
+13717
+15927
+17857
+19638
+20727
+22169
+23430
+25262
+28320
+30425
+33682
+36599
+38654
+40581
+43079
+45757
+49492
+52995
+58509
+61888
+66501
+71886
+78162
+85380
+91589
+96559
+101147
+107780
+114715
+125218
+135106
+145328
+155939
+162699
+168331
+177589
+188974
+202918
+218223
+233142
+241080
+254220
+271628
+291579
+310087
+330890
+347398
+363211
+374898
+Time taken: 2.641 seconds, Fetched: 92 row(s)
+hive>
+
+
+
+Time taken: 0.258 seconds
+hive> select casosAcumulados from dadoscovid where descPais = 'Uruguay';
+OK
+4
+4
+6
+29
+79
+94
+94
+94
+135
+162
+162
+217
+217
+238
+274
+303
+309
+320
+338
+350
+369
+386
+400
+406
+415
+424
+446
+453
+465
+472
+483
+483
+492
+493
+502
+508
+517
+528
+535
+543
+549
+557
+563
+596
+606
+620
+625
+630
+643
+648
+652
+655
+657
+670
+673
+684
+694
+702
+707
+711
+717
+719
+724
+732
+734
+734
+737
+738
+746
+749
+753
+764
+769
+787
+Time taken: 0.229 seconds, Fetched: 74 row(s)
+hive>
+
+
+hive> select avg(novosCasos) from DadosCovid where descPais = 'France';
+Query ID = igti_20200610161650_84d22b68-6f5f-485b-be72-60f8187492f2
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1591801982106_0002, Tracking URL = http://igti-VirtualBox:8088/proxy/application_1591801982106_0002/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1591801982106_0002
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2020-06-10 16:17:08,173 Stage-1 map = 0%,  reduce = 0%
+2020-06-10 16:17:19,789 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 4.01 sec
+2020-06-10 16:17:40,796 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 8.18 sec
+MapReduce Total cumulative CPU time: 8 seconds 180 msec
+Ended Job = job_1591801982106_0002
+MapReduce Jobs Launched:
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 8.18 sec   HDFS Read: 946353 HDFS Write: 108 SUCCESS
+Total MapReduce CPU Time Spent: 8 seconds 180 msec
+OK
+1141.632
+Time taken: 54.505 seconds, Fetched: 1 row(s)
+hive>
+
+
+
+
+hive> describe extended DadosCovid;
+OK
+dataocorrencia       string                                  
+siglapais           string                                  
+descpais             string                                  
+regiao               string                                  
+novoscasos           int                                    
+casosacumulados     int                                    
+novosobitos         int                                    
+obitosacumulados     int                                    
+
+Detailed Table Information Table(tableName:dadoscovid, dbName:default, owner:igti, createTime:1591810234, lastAccessTime:0, retention:0, sd:StorageDescriptor(cols:[FieldSchema(name:dataocorrencia, type:string, comment:null), FieldSchema(name:siglapais, type:string, comment:null), FieldSchema(name:descpais, type:string, comment:null), FieldSchema(name:regiao, type:string, comment:null), FieldSchema(name:novoscasos, type:int, comment:null), FieldSchema(name:casosacumulados, type:int, comment:null), FieldSchema(name:novosobitos, type:int, comment:null), FieldSchema(name:obitosacumulados, type:int, comment:null)], location:hdfs://localhost:54310/igti/Desafio/CovidDados, inputFormat:org.apache.hadoop.mapred.TextInputFormat, outputFormat:org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat, compressed:false, numBuckets:-1, serdeInfo:SerDeInfo(name:null, serializationLib:org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe, parameters:{serialization.format=,, line.delim=\n, field.delim=,}), bucketCols:[], sortCols:[], parameters:{}, skewedInfo:SkewedInfo(skewedColNames:[], skewedColValues:[], skewedColValueLocationMaps:{}), storedAsSubDirectories:false), partitionKeys:[], parameters:{totalSize=929317, numRows=0, rawDataSize=0, numFiles=1, transient_lastDdlTime=1591811203, bucketing_version=2}, viewOriginalText:null, viewExpandedText:null, tableType:MANAGED_TABLE, rewriteEnabled:false, catName:hive, ownerType:USER)
+Time taken: 0.483 seconds, Fetched: 10 row(s)
+hive>
+
+
+hive> select concat(dataOcorrencia,"",siglaPais,"",descPais) from dadoscovid where novosCasos = 501;
+OK
+2020-03-11T00:00:00ZESSpain
+Time taken: 0.29 seconds, Fetched: 1 row(s)
+hive>
+
+
+
+hive> select regiao, count(1) from dadoscovid group by regiao order by regiao;
+Query ID = igti_20200610171030_2787b979-289c-42a9-b1cf-0cdc703d34e5
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1591801982106_0006, Tracking URL = http://igti-VirtualBox:8088/proxy/application_1591801982106_0006/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1591801982106_0006
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2020-06-10 17:10:44,596 Stage-1 map = 0%,  reduce = 0%
+2020-06-10 17:11:20,630 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.26 sec
+2020-06-10 17:11:28,964 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 5.82 sec
+MapReduce Total cumulative CPU time: 5 seconds 820 msec
+Ended Job = job_1591801982106_0006
+Launching Job 2 out of 2
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1591801982106_0007, Tracking URL = http://igti-VirtualBox:8088/proxy/application_1591801982106_0007/
+Kill Command = /usr/local/hadoop/bin/mapred job  -kill job_1591801982106_0007
+Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1
+2020-06-10 17:11:48,448 Stage-2 map = 0%,  reduce = 0%
+2020-06-10 17:11:56,835 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 2.09 sec
+2020-06-10 17:12:11,384 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 5.77 sec
+MapReduce Total cumulative CPU time: 5 seconds 770 msec
+Ended Job = job_1591801982106_0007
+MapReduce Jobs Launched:
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 5.82 sec   HDFS Read: 942683 HDFS Write: 266 SUCCESS
+Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 5.77 sec   HDFS Read: 7704 HDFS Write: 236 SUCCESS
+Total MapReduce CPU Time Spent: 11 seconds 590 msec
+OK
+118
+AFRO 3417
+AMRO 4079
+EMRO 1816
+EURO 5431
+SEARO 970
+WPRO 1874
+Time taken: 102.993 seconds, Fetched: 7 row(s)
+hive>
+
+
+
